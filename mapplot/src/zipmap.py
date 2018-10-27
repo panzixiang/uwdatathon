@@ -1,5 +1,6 @@
 import csv
 from pylab import *
+import matplotlib.pyplot as plt
 
 def read_ascii_boundary(filestem):
     '''
@@ -50,7 +51,12 @@ def read_ascii_boundary(filestem):
 # Main script starts here
 
 # Read in ZIP code boundaries for California
-d = read_ascii_boundary('../data/zip5/zt06_d00',)
+boundary_ca = read_ascii_boundary('../data/zip5/zt06_d00')
+
+boundary_or = read_ascii_boundary('../data/zip5/zt41_d00')
+
+boundary_wa = read_ascii_boundary('../data/zip5/zt53_d00')
+
 
 # Read in data for number of births by ZIP code in California
 f = csv.reader(open('../data/CA_2007_births_by_ZIP.txt', 'r'))
@@ -65,7 +71,8 @@ max_births = max(births.values())
     
 # Create figure and two axes: one to hold the map and one to hold
 # the colorbar
-figure(figsize=(30, 30), dpi=300)
+fig = figure(figsize=(20, 20), dpi=300)
+fig.set_size_inches(20, 20, forward=True)
 map_axis = axes([0.0, 0.0, 0.8, 0.9])
 cb_axis = axes([0.83, 0.1, 0.03, 0.6])
 
@@ -80,9 +87,9 @@ axis([-125, -114, 32, 42.5])
 gca().set_axis_off()
 
 # Loop over the ZIP codes in the boundary file
-for polygon_id in d:
-    polygon_data = array(d[polygon_id]['polygon'])
-    zipcode = d[polygon_id]['name']
+for polygon_id in boundary_ca:
+    polygon_data = array(boundary_ca[polygon_id]['polygon'])
+    zipcode = boundary_ca[polygon_id]['name']
     num_births = births[zipcode] if zipcode in births else 0.
     # Define the color for the ZIP code
     fc = cmap(num_births / max_births)
@@ -100,10 +107,13 @@ cb.set_label('Number of births')
 # Change all fonts to Arial
 for o in gcf().findobj(matplotlib.text.Text):
     o.set_fontname('Arial')
-    o.set_fontsize(30)
+    o.set_fontsize(18)
 
-# Export figure to bitmap    
+
+# Export figure to bitmap
 savefig('../images/ca_births.png')
+# plt.show()
+
 
 # Alabama - zt01_d00_ascii.zip (1,337,894 bytes)
 # Alaska - zt02_d00_ascii.zip (2,422,373 bytes)
