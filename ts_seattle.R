@@ -55,6 +55,8 @@ qplot(time,deseasoned, main = 'De-seasoned Seattle rental inventory on Zillow') 
 reg_model = lm(deseasoned~time)
 summary(reg_model)
 
+qplot(time, resid(reg_model), ylab='Rental inventory', main='Residual from lm fit')
+
 plot.ACFest <- function(ts, main=NULL, n.lags=40)
 {
   ts.acf <- acf(ts, lag.max=n.lags, plot=FALSE)
